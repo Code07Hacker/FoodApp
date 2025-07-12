@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collation = "foods")
+@Document(collation = "Foods")
 public class FoodEntity {
     @Id
     private String id;
