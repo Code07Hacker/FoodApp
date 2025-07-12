@@ -6,7 +6,6 @@ import in.hackercom.foodiesapi.Repository.FoodRepository;
 import in.hackercom.foodiesapi.io.FoodRequest;
 import in.hackercom.foodiesapi.io.FoodResponse;
 import in.hackercom.foodiesapi.service.FoodService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -15,13 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -78,5 +77,26 @@ public class FoodServiceImpl implements FoodService {
         FoodEntity foodEntity = foodRepository.findById(id).orElseThrow(()->
                 new RuntimeException("Food Not Found"));
         return foodEntityMapper.convertToFoodResponse(foodEntity);
+    }
+
+    @Override
+    public boolean deleteFile(String filename) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(filename)
+                .build();
+        s3Client.deleteObject(deleteObjectRequest);
+        return true;
+    }
+
+    @Override
+    public void deleteFood(String id) {
+        FoodResponse response = readFood(id);
+        String imageUrl = response.getImageUrl();
+        String filename = imageUrl.substring(imageUrl.lastIndexOf("/")+1);
+        boolean isFileDelete = deleteFile(filename);
+        if(isFileDelete){
+            foodRepository.deleteById(response.getId());
+        }
     }
 }
