@@ -1,5 +1,10 @@
 package in.hackercom.foodiesapi.service.Impl;
 
+import in.hackercom.foodiesapi.Entity.FoodEntity;
+import in.hackercom.foodiesapi.Mapper.FoodEntityMapper;
+import in.hackercom.foodiesapi.Repository.FoodRepository;
+import in.hackercom.foodiesapi.io.FoodRequest;
+import in.hackercom.foodiesapi.io.FoodResponse;
 import in.hackercom.foodiesapi.service.FoodService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +26,8 @@ import java.util.UUID;
 public class FoodServiceImpl implements FoodService {
 
     private final S3Client s3Client;
+    private final FoodEntityMapper foodEntityMapper;
+    private final FoodRepository foodRepository;
 
     @Value("${aws.s3.bucketName}")
     private String bucketName;
@@ -44,5 +51,14 @@ public class FoodServiceImpl implements FoodService {
         }catch (IOException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"An Error Occured while uploading the file");
         }
+    }
+
+    @Override
+    public FoodResponse addFood(FoodRequest request, MultipartFile file) {
+        FoodEntity foodEntity = foodEntityMapper.convertToFoodEntity(request);
+        String imageUrl = uploadFile(file);
+        foodEntity.setImageUrl(imageUrl);
+        foodEntity=foodRepository.save(foodEntity);
+        return foodEntityMapper.convertToFoodResponse(foodEntity);
     }
 }
