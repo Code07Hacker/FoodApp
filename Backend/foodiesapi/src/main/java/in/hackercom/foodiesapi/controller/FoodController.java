@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 
@@ -38,4 +37,10 @@ public class FoodController {
     public List<FoodResponse> getFoods(){
         return foodService.readFoods();
     }
+
+    @GetMapping("/{id}")
+    public FoodResponse readFood(@PathVariable String id){
+        return foodService.readFood(id);
+    }
+
 }

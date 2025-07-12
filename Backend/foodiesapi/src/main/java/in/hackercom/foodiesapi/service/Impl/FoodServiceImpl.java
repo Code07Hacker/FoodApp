@@ -21,6 +21,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -70,5 +71,12 @@ public class FoodServiceImpl implements FoodService {
        List<FoodEntity> databaseEntries =  foodRepository.findAll();
        return databaseEntries.stream().map(foodEntityMapper::convertToFoodResponse)
                .toList();
+    }
+
+    @Override
+    public FoodResponse readFood(String id) {
+        FoodEntity foodEntity = foodRepository.findById(id).orElseThrow(()->
+                new RuntimeException("Food Not Found"));
+        return foodEntityMapper.convertToFoodResponse(foodEntity);
     }
 }
