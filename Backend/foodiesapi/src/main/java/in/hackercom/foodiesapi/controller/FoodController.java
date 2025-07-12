@@ -7,12 +7,12 @@ import in.hackercom.foodiesapi.io.FoodResponse;
 import in.hackercom.foodiesapi.service.FoodService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/foods")
@@ -32,5 +32,10 @@ public class FoodController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid Json");
         }
         return foodService.addFood(request,file);
+    }
+
+    @GetMapping
+    public List<FoodResponse> getFoods(){
+        return foodService.readFoods();
     }
 }
