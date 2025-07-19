@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Routes,
     Route,
@@ -17,22 +17,27 @@ import Order from './pages/Orders/Order';
 
 
 const App = () => {
-  return (
-    <div className="d-flex" id="wrapper">
-            <Sidebar/>
-            <div id="page-content-wrapper">
-                <Menubar/>
-                <div className="container-fluid">
-                    <Routes>
-                        <Route path="/add" element={<AddFood/>}/>
-                        <Route path="/list" element={<ListFood/>}/>
-                        <Route path="/orders" element={<Order/>}/>
-                        <Route path="/" element={<ListFood/>}/>
-                    </Routes>
+    const [sideBarVisible , setSideBarVisible] = useState(true);
+
+    const toggleSideBar = () => {
+        setSideBarVisible(!sideBarVisible);
+    }
+    return (
+        <div className="d-flex" id="wrapper">
+                <Sidebar sideBarVisible={sideBarVisible}/>
+                <div id="page-content-wrapper">
+                    <Menubar toggleSideBar={toggleSideBar}/>
+                    <div className="container-fluid">
+                        <Routes>
+                            <Route path="/add" element={<AddFood/>}/>
+                            <Route path="/list" element={<ListFood/>}/>
+                            <Route path="/orders" element={<Order/>}/>
+                            <Route path="/" element={<ListFood/>}/>
+                        </Routes>
+                    </div>
                 </div>
             </div>
-        </div>
-  )
+    )
 }
 
 export default App
