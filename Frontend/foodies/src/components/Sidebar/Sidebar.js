@@ -1,10 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import {assets} from '../../assets/assets';
 
 const Sidebar = ({sideBarVisible}) => {
   return (
     <div className={`border-end bg-white ${sideBarVisible ? '' :'d-none'}`} id="sidebar-wrapper">
-        <div className="sidebar-heading border-bottom bg-light">Start Bootstrap</div>
+        <div className="sidebar-heading border-bottom bg-light">
+          <img src={assets.FoodieFood} alt="" height={48}/>
+        </div>
         <div className="list-group list-group-flush">
             <Link className="list-group-item list-group-item-action list-group-item-light p-3" to="/add">
             <i className='bi bi-plus-circle me-2'></i>Add Food</Link>
