@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap/dist/js/bootstrap.bundle.js'
+import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
 import Sidebar from './components/Sidebar/Sidebar';
