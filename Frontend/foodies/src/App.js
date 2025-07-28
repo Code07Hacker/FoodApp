@@ -4,6 +4,7 @@ import {Route, Routes} from 'react-router-dom'
 import Home from './pages/Home/Home';
 import ContantUs from './pages/ContactUs/ContantUs';
 import Explore from './pages/Explore/Explore';
+import FoodDetails from './pages/FoodDetails/FoodDetails';
 
 const App = () => {
   return (
@@ -13,7 +14,7 @@ const App = () => {
         <Route path='/' element={<Home/>}/>
         <Route path='/contactus' element={<ContantUs/>}/>
         <Route path='/explore' element={<Explore/>}/>
-
+        <Route path='/food/:id' element={<FoodDetails/>}/>
       </Routes>
     </div>
   )
