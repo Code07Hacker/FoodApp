@@ -6,6 +6,7 @@ import ContantUs from './pages/ContactUs/ContantUs';
 import Explore from './pages/Explore/Explore';
 import FoodDetails from './pages/FoodDetails/FoodDetails';
 import Cart from './pages/Cart/Cart';
+import PlaceOrder from './pages/PlaceOrder/PlaceOrder';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path='/explore' element={<Explore/>}/>
         <Route path='/food/:id' element={<FoodDetails/>}/>
         <Route path='/cart' element={<Cart/>}/>
+        <Route path='/order' element={<PlaceOrder/>}/>
       </Routes>
     </div>
   )
