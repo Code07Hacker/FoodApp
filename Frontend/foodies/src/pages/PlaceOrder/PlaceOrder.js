@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./PlaceOrder.css";
 import { assets } from "../../assets/assets";
+import { StoreContext } from "../../context/StoreContext";
 
 const PlaceOrder = () => {
+
+  const {foodList , quantities , setQuantities} = useContext(StoreContext);
+
+  const cartItems = foodList.filter(food => quantities[food.id]>0);
+
+  const subtotal = cartItems.reduce((acc,food)=>acc+food.price*quantities[food.id],0);
+  const shipping = subtotal === 0 ? 0.0 : 10;
+  const tax = subtotal * 0.1;
+  const total = subtotal + shipping + tax;
   return (
     <div className="container mt-4">
       <main>
@@ -19,38 +29,39 @@ const PlaceOrder = () => {
           <div className="col-md-5 col-lg-4 order-md-last">
             <h4 className="d-flex justify-content-between align-items-center mb-3">
               <span className="text-primary">Your cart</span>
-              <span className="badge bg-primary rounded-pill">3</span>
+              <span className="badge bg-primary rounded-pill">{cartItems.length}</span>
             </h4>
             <ul className="list-group mb-3">
+              {cartItems.map((item,index)=>{
+                return <li key={index} className="list-group-item d-flex justify-content-between lh-sm">
+                  <div>
+                    <h6 className="my-0">{item.name}</h6>
+                    <small className="text-body-secondary">
+                      Qty : {quantities[item.id]}
+                    </small>
+                  </div>
+                  <span className="text-body-secondary">&#8377;{item.price * quantities[item.id]}</span>
+                </li>
+              })}
               <li className="list-group-item d-flex justify-content-between lh-sm">
                 <div>
-                  <h6 className="my-0">Product name</h6>
-                  <small className="text-body-secondary">
-                    Brief description
-                  </small>
+                  <span>
+                    Shipping
+                  </span>
                 </div>
-                <span className="text-body-secondary">$12</span>
+                <span className="text-body-secondary">&#8377; {subtotal === 0 ? 0.0 : shipping.toFixed(2)}</span>
               </li>
               <li className="list-group-item d-flex justify-content-between lh-sm">
                 <div>
-                  <h6 className="my-0">Second product</h6>
-                  <small className="text-body-secondary">
-                    Brief description
-                  </small>
+                  <span>
+                    Tax (10%)
+                  </span>
                 </div>
-                <span className="text-body-secondary">$8</span>
-              </li>
-              <li className="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                  <h6 className="my-0">Third item</h6>
-                  <small className="text-body-secondary">
-                    Brief description
-                  </small>
-                </div>
-                <span className="text-body-secondary">$5</span>
+                <span className="text-body-secondary">&#8377; {tax.toFixed(2)}</span>
               </li>
               <li className="list-group-item d-flex justify-content-between">
-                <span>Total (INR)</span> <strong>&#8377;20</strong>
+                <span>Total (INR)</span> 
+                <strong>&#8377;{total.toFixed(2)}</strong>
               </li>
             </ul>
           </div>
@@ -66,7 +77,7 @@ const PlaceOrder = () => {
                     type="text"
                     className="form-control"
                     id="firstName"
-                    placeholder=""
+                    placeholder="Ankit"
                     value=""
                     required
                   />
@@ -79,7 +90,7 @@ const PlaceOrder = () => {
                     type="text"
                     className="form-control"
                     id="lastName"
-                    placeholder=""
+                    placeholder="Kumawat"
                     value=""
                     required
                   />
