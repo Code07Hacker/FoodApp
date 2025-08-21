@@ -7,6 +7,7 @@ import in.hackercom.foodiesapi.io.UserRequest;
 import in.hackercom.foodiesapi.io.UserResponse;
 import in.hackercom.foodiesapi.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,9 +18,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserEntityMapper userEntityMapper;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public UserResponse registerUser(UserRequest request) {
         UserEntity userEntity = userEntityMapper.getUserEntity(request);
+        userEntity.setPassword(passwordEncoder.encode(request.getPassword()));
         userEntity = userRepository.save(userEntity);
         return userEntityMapper.convertToUserResponse(userEntity);
     }
