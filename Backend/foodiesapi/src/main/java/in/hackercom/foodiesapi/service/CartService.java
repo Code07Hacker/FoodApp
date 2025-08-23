@@ -1,7 +1,12 @@
 package in.hackercom.foodiesapi.service;
 
+import in.hackercom.foodiesapi.io.CartRequest;
+import in.hackercom.foodiesapi.io.CartResponse;
+
 public interface CartService {
 
-    void addToCart(String foodId);
+    CartResponse addToCart(CartRequest request);
+
+    CartResponse getCart();
 
 }
