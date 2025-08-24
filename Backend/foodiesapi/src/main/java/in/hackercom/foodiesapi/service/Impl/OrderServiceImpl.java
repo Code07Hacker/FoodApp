@@ -4,6 +4,7 @@ import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import in.hackercom.foodiesapi.Entity.OrderEntity;
+import in.hackercom.foodiesapi.Repository.CartRepository;
 import in.hackercom.foodiesapi.Repository.OrderRepository;
 import in.hackercom.foodiesapi.io.OrderRequest;
 import in.hackercom.foodiesapi.io.OrderResponse;
@@ -16,12 +17,15 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final UserService userService;
+    private final CartRepository cartRepository;
     private final AuthenticationFacade authenticationFacade;
 
     @Value("${razorpay_key}")
@@ -47,6 +51,20 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setUserId(loggedInUser);
         newOrder= orderRepository.save(newOrder);
         return convertToResponse(newOrder);
+    }
+
+    @Override
+    public void VerifyPayments(Map<String, String> paymentData, String status) {
+        String razorpayOrderId = paymentData.get("razorpay_order_id");
+        OrderEntity existingOrder = orderRepository.findByRazorpayOrderId(razorpayOrderId)
+                .orElseThrow(()-> new RuntimeException("Order Not Found"));
+        existingOrder.setPaymentStatus(status);
+        existingOrder.setRazorpaySignature(paymentData.get("razorpay_signature"));
+        existingOrder.setRazorpayPaymentId(paymentData.get("razorpay_payment_id"));
+        orderRepository.save(existingOrder);
+        if("paid".equalsIgnoreCase(status)){
+            cartRepository.deleteByUserId(existingOrder.getUserId());
+        }
     }
 
     private OrderResponse convertToResponse(OrderEntity newOrder) {
