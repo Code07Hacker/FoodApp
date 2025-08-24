@@ -1,0 +1,25 @@
+package in.hackercom.foodiesapi.Entity;
+
+import in.hackercom.foodiesapi.io.OrderItem;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
+
+@Document(collection = "orders")
+@Data
+public class OrderEntity {
+    @Id
+    private String id;
+    private String userId;
+    private String userAddress;
+    private String phoneNumber;
+    private String email;
+    private List<OrderItem> orderItemList;
+    private double amount;
+    private String paymentStatus;
+    private String razorpayOrderId;
+    private String razorpaySignature;
+    private String orderStatus;
+}
